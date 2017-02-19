@@ -14,11 +14,14 @@ class Glyph
 end
 
 class Rectangle < Glyph
-  attr_reader :x, :y, :children
+  attr_reader :x, :y, :children, :name
+  attr_accessor :parent
 
-  def initialize(x,y)
+  def initialize(x,y, name)
     @x = x
     @y = y
+    @name = name
+    @parent = {}
     @children = []
   end
 
@@ -28,58 +31,49 @@ class Rectangle < Glyph
 
   def insert(glyph)
     @children << glyph
+    glyph.parent = self
   end
 
   def horizontal_border
     "-" * x
   end
 
-  def inner_line
-    "-" + " "*(x-2) + "-"
-  end
-
-  private
-
   def inner_filling
     f = ""
 
     inner_lines.each do |line|
-      f += line + padded_filling(line)
+      f += line + "\n"
     end
 
     f
   end
 
-  # this method will change depending on the filling strategy
   def inner_lines
-    lines = []
-
-    for i in 0...y-2
-      line = ""
-
-      children.each do |c|
-        if children_draws?(c, i)
-          children_line_type = line_type(c, i)
-          line += " #{c.send(children_line_type)} "
-        end
-      end
-
-      lines << "-" + line
-    end
-
-    lines
+    (0...y-2).map { |index| inner_line_at(index) }
   end
 
-  def line_type (children, current_height)
-    current_height == 0 || current_height == children.y - 1 ? :horizontal_border : :inner_line
+  def inner_line_at(i)
+    line = ""
+
+    children.each do |c|
+      if children_draws?(c, i)
+        line += "#{children_line(c, i)} "
+      end
+    end
+    something = "-" + line
+
+    something + " "*(x - something.size - 1) + "-"
   end
 
   def children_draws?(children, current_height)
     children.y > current_height
   end
 
-
-  def padded_filling(line)
-    " "*(x - line.size - 1) + "-\n"
+  def children_line(children, current_height)
+    if current_height == 0 || current_height == children.y - 1
+      children.horizontal_border
+    else
+      children.inner_line_at(current_height)
+    end
   end
 end
