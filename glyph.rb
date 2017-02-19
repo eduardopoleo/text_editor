@@ -31,7 +31,7 @@ class Rectangle < Glyph
   end
 
   def horizontal_border
-    "_" * x
+    "-" * x
   end
 
   def inner_line
@@ -59,19 +59,19 @@ class Rectangle < Glyph
 
       children.each do |c|
         if children_draws?(c, i)
-          # Parents border + the inner line of the children
-          line += "- #{c.inner_line}"
-        else
-          # padded_filling will fill the rest of the shapped even if does not
-          # contain children anymore.
-          line += "-"
+          children_line_type = line_type(c, i)
+          line += " #{c.send(children_line_type)} "
         end
       end
 
-      lines << line
+      lines << "-" + line
     end
 
     lines
+  end
+
+  def line_type (children, current_height)
+    current_height == 0 || current_height == children.y - 1 ? :horizontal_border : :inner_line
   end
 
   def children_draws?(children, current_height)
