@@ -14,7 +14,7 @@ class Glyph
 end
 
 class Rectangle < Glyph
-  attr_reader :x, :y
+  attr_reader :x, :y, :children
 
   def initialize(x,y)
     @x = x
@@ -38,23 +38,39 @@ class Rectangle < Glyph
     "-" + " "*(x-2) + "-"
   end
 
-  def inner_filling
-    f = ""
-
-    inner_lines.each do |line|
-      f += line + "\n"
-    end
-
-    f
-  end
-# this method will change depending on children
+  private
+  # this method will change depending on the filling strategy
   def inner_lines
     lines = []
 
     for i in 0...y-2
-      lines << inner_line
+      if children.length == 0
+        lines << inner_line
+      else
+        children_line = ""
+
+        children.each do |c|
+          children_line += c.inner_line
+        end
+
+        lines << "-" + children_line + "-"
+      end
     end
 
     lines
+  end
+
+  def inner_filling
+    f = ""
+
+    inner_lines.each do |line|
+      f += line + padded_filling(line)
+    end
+
+    f
+  end
+
+  def padded_filling(line)
+    " "*(x - line.size - 1) + "-\n"
   end
 end
