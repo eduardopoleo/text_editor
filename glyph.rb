@@ -39,26 +39,6 @@ class Rectangle < Glyph
   end
 
   private
-  # this method will change depending on the filling strategy
-  def inner_lines
-    lines = []
-
-    for i in 0...y-2
-      if children.length == 0
-        lines << inner_line
-      else
-        children_line = ""
-
-        children.each do |c|
-          children_line += c.inner_line
-        end
-
-        lines << "-" + children_line + "-"
-      end
-    end
-
-    lines
-  end
 
   def inner_filling
     f = ""
@@ -69,6 +49,35 @@ class Rectangle < Glyph
 
     f
   end
+
+  # this method will change depending on the filling strategy
+  def inner_lines
+    lines = []
+
+    for i in 0...y-2
+      line = ""
+
+      children.each do |c|
+        if children_draws?(c, i)
+          # Parents border + the inner line of the children
+          line += "- #{c.inner_line}"
+        else
+          # padded_filling will fill the rest of the shapped even if does not
+          # contain children anymore.
+          line += "-"
+        end
+      end
+
+      lines << line
+    end
+
+    lines
+  end
+
+  def children_draws?(children, current_height)
+    children.y > current_height
+  end
+
 
   def padded_filling(line)
     " "*(x - line.size - 1) + "-\n"
