@@ -1,14 +1,13 @@
-require_relative "./rectangle"
-require_relative "./circle"
+Dir["./glyphs/*.rb"].each {|file| require file }
 
-rec1 = Rectangle.new(100, 20)
-rec2 = Rectangle.new(20, 10)
-rec3 = Rectangle.new(20, 5)
-rec4 = Rectangle.new(5, 5)
+window = Window.new(0, 50, 0, 20)
+rectangle1 = Rectangle.new(10, 10)
+rectangle2 = Rectangle.new(13, 13)
+circle = Circle.new(5)
+circle1 = Circle.new(2)
 
-rec1.insert(rec2)
-rec1.insert(rec3)
-
-rec2.insert(rec4)
-
-rec1.draw
+window.insert(rectangle1)
+window.insert(rectangle2)
+window.insert(circle)
+window.insert(circle1)
+window.draw

@@ -1,7 +1,8 @@
 require 'pry'
 
 class Glyph
-  attr_accessor :x0, :x1, :y0, :y1, :children
+  attr_reader :x0, :x1, :y0, :y1
+  attr_accessor :children
 
   def draw
     (y0..y1).each do |y|
@@ -16,7 +17,7 @@ class Glyph
     initialize_children(child)
 
     child.assign_coordinates(calculate_cordinates(child))
-    @children << child
+    children << child
   end
 
   def draw_point(x, y)
