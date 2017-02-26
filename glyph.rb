@@ -1,7 +1,7 @@
 require 'pry'
 
 class Glyph
-  attr_reader :children, :width, :height
+  attr_reader :children
   attr_accessor :x0, :x1, :y0, :y1
 
   def draw

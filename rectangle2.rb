@@ -20,6 +20,8 @@ class Window < Glyph
 end
 
 class Rectangle < Glyph
+  attr_reader :width, :height
+
   def initialize(width, height)
     @width = width
     @height = height
