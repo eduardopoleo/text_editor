@@ -10,7 +10,9 @@ class Window < Glyph
     @children = []
   end
 
-  private
+  def bounds
+    [x1, y1]
+  end
 
   def draw?(x, y)
     x == x0 || x == x1 || y == y0 || y == y1
@@ -25,6 +27,10 @@ class Rectangle < Glyph
     @children = []
   end
 
+  def bounds
+    [width, height]
+  end
+
   def draw?(xx, yy)
     xx == x0 && (yy >= y0 && yy <= y1) ||
     xx == x1 && (yy >= y0 && yy <= y1) ||
@@ -34,15 +40,19 @@ class Rectangle < Glyph
 end
 
 class Circle < Glyph
-  def initialize(r)
-    @width = 2*r
-    @height = 2*r
+  attr_reader :r
 
+  def initialize(r)
+    @r = r
     @children = []
   end
 
   def draw?(xx, yy)
-    in_area?(xx, yy) && cal_distance(xx,yy).round == @width / 2
+    in_area?(xx, yy) && cal_distance(xx,yy).round == r
+  end
+
+  def bounds
+    [2*r, 2*r]
   end
 
   private

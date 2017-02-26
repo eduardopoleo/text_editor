@@ -27,7 +27,7 @@ class Glyph
   end
 
   def bounds
-    [width, height]
+    raise 'each glyph requires and implementation of its bounds'
   end
 
   def assign_coordinates(coordinates)
