@@ -54,9 +54,9 @@ class Glyph
       next_child_y0 = y0 + 1
       next_child_y1 = next_child_y0 + child.bounds[1]
     else
-      next_child_x0 = children.last.x1 + 1
+      next_child_x0 = children.last.x1 + 2
       next_child_x1 = next_child_x0 + child.bounds[0]
-      next_child_y0 = chilren.last.y0
+      next_child_y0 = children.last.y0
       next_child_y1 = next_child_y0 + child.bounds[1]
     end
 
