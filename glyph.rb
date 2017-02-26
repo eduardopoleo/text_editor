@@ -1,8 +1,7 @@
 require 'pry'
 
 class Glyph
-  attr_reader :children
-  attr_accessor :x0, :x1, :y0, :y1
+  attr_accessor :x0, :x1, :y0, :y1, :children
 
   def draw
     (y0..y1).each do |y|
@@ -14,6 +13,8 @@ class Glyph
   end
 
   def insert(child)
+    initialize_children(child)
+
     child.assign_coordinates(calculate_cordinates(child))
     @children << child
   end
@@ -46,6 +47,12 @@ class Glyph
   end
 
   private
+
+  def initialize_children(child)
+    # this is kind of shitty but it allows for a much better glyph interface
+    @children ||= []
+    child.children ||= []
+  end
 
   def calculate_cordinates(child)
     if children.empty?

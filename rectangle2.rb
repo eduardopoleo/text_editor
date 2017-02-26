@@ -6,8 +6,6 @@ class Window < Glyph
     @x1 = x1
     @y0 = y0
     @y1 = y1
-
-    @children = []
   end
 
   def bounds
@@ -25,8 +23,6 @@ class Rectangle < Glyph
   def initialize(width, height)
     @width = width
     @height = height
-
-    @children = []
   end
 
   def bounds
@@ -46,7 +42,6 @@ class Circle < Glyph
 
   def initialize(r)
     @r = r
-    @children = []
   end
 
   def draw?(xx, yy)
