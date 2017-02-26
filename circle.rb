@@ -11,7 +11,7 @@ class Circle < Glyph
   def draw
     (-r..r).each do |x|
       (-r..r).each do |y|
-        print cal_distance(x,y).round == r ? symbol : " "
+        print cal_distance(x,y).round == r ? "#" : " "
       end
       puts unless x == r
     end
