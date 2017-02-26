@@ -1,5 +1,8 @@
+require 'pry'
+
 class Glyph
-  attr_reader :children, :x0, :x1, :y0, :y1
+  attr_reader :children
+  attr_accessor :x0, :x1, :y0, :y1
 
   def draw
     (y0..y1).each do |y|
@@ -11,8 +14,7 @@ class Glyph
   end
 
   def insert(child)
-    raise "There is not enough area available" if child.area > area
-    child.assign_coordinates(initial_x, final_x, initial_y, final_y)
+    child.assign_coordinates(calculate_cordinates(child))
     @children << child
   end
 
@@ -24,26 +26,15 @@ class Glyph
     (x1 - x0) * (y1 - y2)
   end
 
-  private
-
-  def initial_x
-    children.last.x1 + 1
+  def bounds
+    raise "Every child must know how to determine the x, y that determine the rectangular area its occupy"
   end
 
-  def final_x
-    initial_x + child.x
-  end
-
-  def initial_y
-
-  end
-
-  def available_area
-    area - children_area
-  end
-
-  def children_area
-    children.reduce {|memo, child| memo += child.area }
+  def assign_coordinates(coordinates)
+    @x0 = coordinates[0]
+    @x1 = coordinates[1]
+    @y0 = coordinates[2]
+    @y1 = coordinates[3]
   end
 
   def draw?(x, y)
@@ -54,38 +45,33 @@ class Glyph
     children.any? { |child| child.draw?(x, y) || child.children_draw?(x, y) }
   end
 
+  private
+
+  def calculate_cordinates(child)
+    if children.empty?
+      next_child_x0 = x0 + 2
+      next_child_x1 = next_child_x0 + child.bounds[0]
+      next_child_y0 = y0 + 1
+      next_child_y1 = next_child_y0 + child.bounds[1]
+    else
+      next_child_x0 = children.last.x1 + 1
+      next_child_x1 = next_child_x0 + child.bounds[0]
+      next_child_y0 = chilren.last.y0
+      next_child_y1 = next_child_y0 + child.bounds[1]
+    end
+
+    [ next_child_x0, next_child_x1, next_child_y0, next_child_y1 ]
+  end
+
+  def available_area
+    area - children_area
+  end
+
+  def children_area
+    children.reduce {|memo, child| memo += child.area }
+  end
+
   def pixel
     "#"
   end
 end
-
-class Window < Glyph
-  def initialize(x0, x1, y0, y1)
-    @x0 = x0
-    @x1 = x1
-    @y0 = y0
-    @y1 = y1
-
-    @children = []
-  end
-
-  private
-
-  def draw?(x, y)
-    x == x0 || x == x1 || y == y0 || y == y1
-  end
-end
-
-class Rectangle < Glyph
-  def initialize(x, y)
-    @area = x * y
-  end
-
-  private
-
-  def draw?(x, y)
-    x == x0 || x == x1 || y == y0 || y == y1
-  end
-end
-
-Window.new(0, 50, 0, 20).draw
