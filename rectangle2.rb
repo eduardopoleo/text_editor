@@ -18,18 +18,11 @@ class Window < Glyph
 end
 
 class Rectangle < Glyph
-  # change this by width and length because it is extremely confusing
-  attr_reader :x, :y
-
-  def initialize(x, y)
-    @x = x
-    @y = y
+  def initialize(width, height)
+    @width = width
+    @height = height
 
     @children = []
-  end
-
-  def bounds
-    [x, y]
   end
 
   def draw?(xx, yy)
@@ -41,17 +34,11 @@ class Rectangle < Glyph
 end
 
 class Circle < Glyph
-  attr_reader :width, :height
-
   def initialize(r)
     @width = 2*r
     @height = 2*r
 
     @children = []
-  end
-
-  def bounds
-    [width, height]
   end
 
   def draw?(xx, yy)

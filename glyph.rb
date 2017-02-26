@@ -1,7 +1,7 @@
 require 'pry'
 
 class Glyph
-  attr_reader :children
+  attr_reader :children, :width, :height
   attr_accessor :x0, :x1, :y0, :y1
 
   def draw
@@ -27,7 +27,7 @@ class Glyph
   end
 
   def bounds
-    raise "Every child must know how to determine the x, y that determine the rectangular area its occupy"
+    [width, height]
   end
 
   def assign_coordinates(coordinates)
@@ -61,14 +61,6 @@ class Glyph
     end
 
     [ next_child_x0, next_child_x1, next_child_y0, next_child_y1 ]
-  end
-
-  def available_area
-    area - children_area
-  end
-
-  def children_area
-    children.reduce {|memo, child| memo += child.area }
   end
 
   def pixel
